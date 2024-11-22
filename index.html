@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birdify - Identificador de Aves</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Estilos generales */
+        body {
+            background-color: #f0f4f8;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Encabezado */
+        .header-container {
+            margin-top: 5px; /* Margen superior reducido */
+            margin-bottom: 5px; /* Margen inferior reducido */
+            text-align: center;
+        }
+
+        .app-logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .app-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #6c63ff;
+            margin: 0;
+        }
+
+        .app-subtitle {
+            font-size: 1.2rem;
+            color: #4a44d1;
+            margin-top: 2px; /* Margen superior reducido */
+        }
+
+        /* Contenedor principal */
+        .custom-container {
+            max-width: 500px;
+            margin-top: 5px; /* Margen superior reducido */
+            padding: 1.5rem;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #ffffff, #f0f4f8);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px; /* Separar el contenedor del footer */
+        }
+
+        .custom-label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #6c63ff;
+            display: block;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Estilos para el input de archivo */
+        .custom-file-input {
+            display: inline-block;
+            position: relative;
+            width: auto; /* Ancho automático */
+        }
+
+        .custom-file-input::file-selector-button {
+            background-color: #6c63ff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: auto; /* Ancho ajustado */
+            text-align: center;
+        }
+
+        .custom-file-input::file-selector-button:hover {
+            background-color: #5a53e0;
+        }
+
+        .custom-file-input::file-selector-button:active {
+            background-color: #4a44d1;
+        }
+
+        .custom-file-label {
+            color: #6c63ff;
+            font-size: 1rem;
+            margin-left: 1rem;
+            font-weight: normal;
+            display: block;
+            text-align: center;
+        }
+
+        /* Estilo para vista previa de la imagen */
+        #imagePreview {
+            margin-top: 10px;
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease;
+        }
+
+        #imagePreview:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Botón de subida */
+        .custom-button {
+            background-color: #6c63ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .custom-button:hover {
+            background-color: #4a44d1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1c2833;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+            font-size: 14px;
+            position: relative;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: auto;
+        }
+
+        footer a {
+            color: #f1c40f;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #d4ac0d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container d-flex justify-content-center flex-column align-items-center">
+        <!-- Encabezado -->
+        <div class="header-container">
+            <h1 class="app-title">Birdify</h1>
+            <p class="app-subtitle">Descubre y aprende sobre las aves que te rodean</p>
+        </div>
+
+        <!-- Contenedor principal -->
+        <div class="custom-container">
+            <label for="fileInput" class="custom-label">Sube la imagen del ave que deseas identificar:</label>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input class="form-control custom-file-input" type="file" name="file" id="fileInput" accept="image/*" required>
+                </div>
+                <img id="imagePreview" src="" alt="Vista previa de la imagen" style="display: none;">
+                <button type="submit" class="btn custom-button">Subir</button>
+            </form>
+            <div id="responseMessage" class="text-center"></div>
+            <div id="alertMessage" class="alert"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Diseñado y Desarrollado con ❤️ por <strong>Jhojan Calderón 809892 UCC</strong></p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script>
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const responseMessage = document.getElementById('responseMessage');
+        const alertMessage = document.getElementById('alertMessage');
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.style.display = 'none';
+            }
+        });
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            fetch('/classify', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.message) {
+                    responseMessage.textContent = data.message;
+                    responseMessage.style.color = '#28a745';
+                } else if (data.error) {
+                    responseMessage.textContent = data.error;
+                    responseMessage.style.color = '#dc3545';
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                responseMessage.textContent = 'Error al subir la imagen.';
+                responseMessage.style.color = '#dc3545';
+            });
+        });
+    </script>
+</body>
+</html>
